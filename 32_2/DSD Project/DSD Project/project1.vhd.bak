@@ -1,0 +1,34 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+-- Entity declaration
+entity timer is
+    port(
+        clk: in std_logic;  -- Clock signal
+        rst: in std_logic;  -- Reset signal
+        buzz: out std_logic  -- Buzzer output
+    );
+end timer;
+
+-- Architecture body
+architecture behavioral of timer is
+    -- Counter to keep track of the number of clock cycles
+    signal counter: integer range 0 to 200000;  -- 200000 clock cycles is equivalent to 20 seconds
+begin
+    -- Process to count the clock cycles and trigger the buzzer
+    process(clk)
+    begin
+        if rst='1' then
+            counter <= 0;  -- Reset the counter on reset
+            buzz <= '0';  -- Turn off the buzzer
+        elsif rising_edge(clk) then
+            if counter = 200000 then
+                buzz <= '1';  -- Turn on the buzzer
+                counter <= 0;  -- Reset the counter
+            else
+                buzz <= '0';  -- Turn off the buzzer
+                counter <= counter + 1;  -- Increment the counter
+            end if;
+        end if;
+    end process;
+end behavioral;
